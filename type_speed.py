@@ -12,7 +12,7 @@ class TypingSpeedTestApp:
     def __init__(self,root):
         self.root = root
         self.root.title("typing speed test")
-        self.root.minsize(height = 200,width = 400)
+        self.root.minsize(height = 100,width = 400)
 
         self.start_time = 0
         self.sentence = random.choice(SENTENCES)
@@ -41,18 +41,18 @@ class TypingSpeedTestApp:
 
     def end_typing(self,event):
         end_time = time.time()
-        typed_text = self.entry.get()
+        typed_text = self.entry.get("1.0", tk.END).strip()
 
         time_taken = end_time - self.start_time
 
         word_length = len(typed_text.split())
         
-        wps = word_length/time_taken
+        wps = word_length/time_taken if time_taken > 0 else 0
 
         accuracy = sum(1 for a,b in zip(self.sentence,typed_text) if a == b)/len(self.sentence) 
         accuracy = accuracy*100
 
-        self.result_label.config(text = f"accuracy {accuracy:.2f} || speed {wps:.2f}")
+        self.result_label.config(text = f"accuracy {accuracy:.2f} || speed {wps:.2f} WPS",font=("Arial", 26))
 
     def retry(self):
         self.sentence = random.choice(SENTENCES)
